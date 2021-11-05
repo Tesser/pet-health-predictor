@@ -1,7 +1,7 @@
 # pet_health_predictor
 YSIET
 
-- data: 모델에 사용되는 데이터 파일 경로
+- data: 모델에 사용되는 파일을 포함하는 폴더
 - data/YSIET_ver03.csv: 모델에 사용되는 데이터 파일
 - test_input.json: 테스트에 사용되는 JSON 파일 샘플
 - api.py: Flask API
