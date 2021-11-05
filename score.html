@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+      integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.min.js"
+      integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+      integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+      integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <script>
+      var fr = new FileReader();
+
+      function runTest() {
+        try {
+          var myFile = $("#inputGroupFile01").prop("files")[0];
+          fr.readAsText(myFile);
+        } catch (e) {
+          alert("파일을 추가해 주세요.");
+        }
+      }
+
+      function runUpdate() {
+        $("#loader2").show();
+        var fileinfo;
+        try {
+          fileinfo = $("#inputGroupFile02").val();
+          console.log(fileinfo);
+          if (fileinfo == null || fileinfo == "") {
+            alert("잘못된 파일입니다.");
+          }
+        } catch (e) {
+          alert("잘못된 파일입니다.");
+        }
+
+        try {
+          $.ajax({
+            url: "http://localhost:5000/train",
+            type: "POST",
+            data: {
+              file_form: fileinfo,
+            },
+          });
+        } catch (e) {
+          console.log(e);
+        }
+        setTimeout(function () {
+          $("#loader2").hide();
+          $("#update").show();
+        }, 2000);
+      }
+
+      function runRequest() {
+        var data = {};
+        try {
+          data = JSON.parse(fr.result);
+        } catch (e) {
+          alert("올바른 JSON 형식이 아닙니다.");
+          return;
+        }
+
+        $("#loader").show();
+        setTimeout(function () {
+          $.ajax({
+            url: "http://localhost:5000/predict_score",
+            type: "POST",
+            dataType: "json",
+            data: data,
+            success: function (res) {
+              console.log(res);
+              $("#loader").hide();
+              try {
+                $("#prediction").show();
+
+                $("#skin").text(res.skin);
+                $("#joint").text(res.joint);
+                $("#heart").text(res.heart);
+                $("#eye").text(res.eye);
+                $("#respi").text(res.respi);
+                $("#oral").text(res.oral);
+                $("#diget").text(res.diget);
+                $("#urin").text(res.urin);
+                $("#brain").text(res.brain);
+                $("#hormon").text(res.hormon);
+
+              } catch (e) {
+                alert("오류가 발생했습니다.");
+                $("#loader").hide();
+              }
+            },
+            errror: function () {
+              alert("오류가 발생했습니다.");
+              $("#loader").hide();
+            },
+          });
+        }, 2000);
+      }
+
+      fr.onload = runRequest;
+    </script>
+    <div class="container">
+      <br /><br><br>
+      <h1>YSIET 반려동물 건강지수예측 AI API</h1><br>
+	<h6> 건강지수 예측 가능한 항목은 
+	<br>1)피부건강, 2)관절건강, 3)심장건강, 4)눈건강, 5)호흡기건강, 6)구강건강, 7)소화기건강, 8)비뇨생식기건강, 9)뇌신경건강, 10)호르몬건강이며, <br>
+		각 항목은 1점(매우나쁨)~5점(매우 좋음)으로 결과값이 반환됨<br><br><br>
+	</h6>
+      <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+          <a
+            class="nav-link active"
+            id="home-tab"
+            data-toggle="tab"
+            href="#home"
+            role="tab"
+            aria-controls="home"
+            aria-selected="true"
+            >YSIET 건강지수 예측 AI</a
+          >
+        </li>
+      </ul>
+      <div class="tab-content" id="myTabContent" style="margin-top: 50px">
+        <div
+          class="tab-pane fade show active"
+          id="home"
+          role="tabpanel"
+          aria-labelledby="home-tab"
+        >
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="inputGroupFileAddon01"
+                >파일 선택(JSON)</span
+              >
+            </div>
+            <div class="custom-file">
+              <input
+                type="file"
+                class="custom-file-input"
+                id="inputGroupFile01"
+                aria-describedby="inputGroupFileAddon01"
+              />
+              <label class="custom-file-label" for="inputGroupFile01"
+                >데이터 파일을 선택해 주세요.</label
+              >
+            </div>
+          </div>
+          <div>
+            <button type="button" class="btn btn-primary" onclick="runTest()">
+              결과 보기
+            </button>
+          </div>
+          <div class="container" style="margin-top: 50px">
+            <div id="loader" style="display: none">
+              <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
+              <div>알고리즘 예측을 진행하고 있습니다.</div>
+            </div>
+            <div id="prediction" style="display: none">
+              <h2>AI 알고리즘 예측 결과</h2>
+
+              <div class="container" style="margin-top: 30px">
+                <h4>1) 피부 건강 지수: <span id="skin"></span> 점</h4>
+                <h4>2) 관절 건강 지수: <span id="joint"></span> 점</h4>
+                <h4>3) 심장 건강 지수: <span id="heart"></span> 점</h4>
+                <h4>4) 눈 건강 지수: <span id="eye"></span> 점</h4>
+                <h4>5) 호흡기 건강 지수: <span id="respi"></span> 점</h4>
+                <h4>6) 구강 건강 지수: <span id="oral"></span> 점</h4>
+                <h4>7) 소화기 건강 지수: <span id="diget"></span> 점</h4>
+                <h4>8) 비뇨생식기 건강 지수: <span id="urin"></span> 점</h4>
+                <h4>9) 뇌신경 건강 지수: <span id="brain"></span> 점</h4>
+                <h4>10) 호르몬 건강 지수: <span id="hormon"></span> 점</h4>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      $("#inputGroupFile01").on("change", function () {
+        //get the file name
+        var fileName = $(this).val();
+        //replace the "Choose a file" label
+        $(this).next(".custom-file-label").html(fileName);
+      });
+
+      $("#inputGroupFile02").on("change", function () {
+        //get the file name
+        var fileName = $(this).val();
+        //replace the "Choose a file" label
+        $(this).next(".custom-file-label").html(fileName);
+      });
+    </script>
+  </body>
+</html>
