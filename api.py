@@ -5,11 +5,12 @@ import pandas as pd
 import sys
 import logging
 from flask_cors import CORS
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template
 from functions import *
 
 
-df = pd.read_csv('./data/YSIET_ver03.csv', encoding='ansi')
+df = pd.read_csv('./data/YSIET_ver03.csv', encoding='utf8')
+port = 5000
 
 app = Flask(__name__)
 CORS(app)
@@ -23,6 +24,10 @@ def index():
     app.logger.info(__name__)
     return 'server connected'
 
+@app.route('/test', methods=['GET'])
+def test():
+    app.logger.info(__name__)
+    return render_template('test.html', api='localhost:' + str(port))
 
 @app.route('/predict_score', methods=['GET', 'OPTIONS', 'POST'])
 def score_predict():
@@ -63,5 +68,5 @@ def disease_predict():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=port, debug=True)
 
