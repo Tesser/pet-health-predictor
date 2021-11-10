@@ -46,6 +46,7 @@ hello world
  * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
 ```
 
-4. test.html을 실행해주시고, test_input.json을 선택한 뒤, 파란색 예측 버튼을 클릭해주세요.
+4. test.html을 실행해주시고, 파일 선택 버튼을 클릭하신 뒤 test_input.json을 선택해주세요. 이후 파란색 예측 버튼을 클릭해주세요.
+- 정상적으로 파일이 선택되고, 예측이 시작되면 잠시 뒤 결과가 화면에 반환됩니다.
 
 
