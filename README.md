@@ -29,8 +29,9 @@ $ python main.py
 ```
 <br>
 - 정상적으로 API가 실행되었다면, 다음과 같은 화면을 확인하실 수 있습니다.
+- 
 ```shell
-[2021-11-10 14:58:03,051] DEBUG in api: hello world
+$ [2021-11-10 14:58:03,051] DEBUG in api: hello world
 hello world
  * Serving Flask app "api" (lazy loading)
  * Environment: production
