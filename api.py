@@ -1,16 +1,9 @@
-from config import *
-from score_prediction import *
-from disease_prediction import *
-import pandas as pd
 import sys
 import logging
 from flask_cors import CORS
-from flask import Flask, jsonify, request, render_template
-from functions import *
-
-
-df = pd.read_csv('./data/YSIET_ver03.csv', encoding='utf8')
-port = 5000
+from flask import Flask, jsonify, request
+from utils.str_to_float_functions import *
+from utils.prediction import *
 
 app = Flask(__name__)
 CORS(app)
@@ -24,10 +17,6 @@ def index():
     app.logger.info(__name__)
     return 'server connected'
 
-@app.route('/test', methods=['GET'])
-def test():
-    app.logger.info(__name__)
-    return render_template('test.html', api='localhost:' + str(port))
 
 @app.route('/predict_score', methods=['GET', 'OPTIONS', 'POST'])
 def score_predict():
@@ -37,9 +26,8 @@ def score_predict():
     try:
         app.logger.info(feature)
         app.logger.info('prediction started!')
-        json = astype_json(feature)
-        result_dict = score_prediction(df, config, json)
-        print(result_dict)
+        json = make_str_to_float(feature)
+        result_dict = score_prediction(json)
 
     except Exception as e:
         app.logger.info(str(e))
@@ -56,9 +44,8 @@ def disease_predict():
     try:
         app.logger.info(feature)
         app.logger.info('prediction started!')
-        json = astype_json(feature)
-        result_dict = disease_prediction(df, config, json)
-        print(result_dict)
+        json = make_str_to_float(feature)
+        result_dict = disease_prediction(json)
 
     except Exception as e:
         app.logger.info(str(e))
@@ -68,5 +55,4 @@ def disease_predict():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=port, debug=True)
-
+    app.run(host='0.0.0.0', port=5000, debug=True)
