@@ -17,13 +17,13 @@ $ pip install --upgrade pip
 ```
 <br>
 
-#2. 필요한 모듈을 다운로드 받아주세요.
+2. 필요한 모듈을 다운로드 받아주세요.
 ```shell
 $ pip install -r requirements.txt
 ```
 <br>
 
-#3. main.py를 실행해주세요.
+3. main.py를 실행해주세요.
 ```shell
 $ python main.py
 ```
@@ -46,6 +46,6 @@ hello world
  * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
 ```
 
-#4. test.html을 실행해주시고, test_input.json을 선택한 뒤, 파란색 예측 버튼을 클릭해주세요.
+4. test.html을 실행해주시고, test_input.json을 선택한 뒤, 파란색 예측 버튼을 클릭해주세요.
 
 
