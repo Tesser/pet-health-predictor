@@ -11,7 +11,7 @@
 
 ## 간단한 시작법
 
-1. 사용 전 pip 업그레이드를 해주세요.(생략 가능)
+1. 사용 전 pip 업그레이드를 해주세요.(Optional)
 ```shell
 $ pip install --upgrade pip
 ```
