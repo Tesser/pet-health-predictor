@@ -3,14 +3,11 @@ import joblib
 import pickle
 
 
-def disease_prediction(json):
+def disease_prediction(df_json):
 
     scaler = joblib.load('./src/scaler/disease_scaler.save')
     OHE = joblib.load('./src/one_hot_encoder/disease_OHE.joblib')
     model = pickle.load(open('./src/model/disease_model.sav', 'rb'))
-
-    df_json = pd.DataFrame(json, index=['0'])
-    df_json.fillna(-999, inplace=True)
 
     X = OHE.transform(df_json)
     X = scaler.transform(X)
@@ -25,14 +22,11 @@ def disease_prediction(json):
 
 
 
-def score_prediction(json):
+def score_prediction(df_json):
 
     scaler = joblib.load('./src/scaler/score_scaler.save')
     OHE = joblib.load('./src/one_hot_encoder/score_OHE.joblib')
     model = pickle.load(open('./src/model/score_model.sav', 'rb'))
-
-    df_json = pd.DataFrame(json, index=['0'])
-    df_json.fillna(-999, inplace=True)
 
     X = OHE.transform(df_json)
     X = scaler.transform(X)
