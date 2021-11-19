@@ -2,7 +2,7 @@ import sys
 import logging
 from flask_cors import CORS
 from flask import Flask, jsonify, request
-from utils.str_to_float_functions import *
+from utils.preprocessing_json import *
 from utils.prediction import *
 
 app = Flask(__name__)
@@ -26,8 +26,8 @@ def score_predict():
     try:
         app.logger.info(feature)
         app.logger.info('prediction started!')
-        json = make_str_to_float(feature)
-        result_dict = score_prediction(json)
+        df_json = preprocessing_json(feature)
+        result_dict = score_prediction(df_json)
 
     except Exception as e:
         app.logger.info(str(e))
@@ -44,8 +44,8 @@ def disease_predict():
     try:
         app.logger.info(feature)
         app.logger.info('prediction started!')
-        json = make_str_to_float(feature)
-        result_dict = disease_prediction(json)
+        df_json = preprocessing_json(feature)
+        result_dict = disease_prediction(df_json)
 
     except Exception as e:
         app.logger.info(str(e))
